@@ -1,0 +1,1015 @@
+# FINAL MASTER AUDIT, TESTING, HARDENING & SUBMISSION READINESS
+## OAuth Readiness Intelligence — Composio APM Integrations Take-Home Assignment
+
+**Objective:** Deliver the strongest possible, assignment-aligned, reliable, evidence-backed OAuth Readiness Intelligence application.
+
+**Mode:** Final comprehensive audit, targeted fixes, complete regression testing, and submission readiness verification.
+
+**Budget:** Strict ₹0. No paid services, paid APIs, cloud billing, or payment methods.
+
+**Current reported baseline:**
+- 75/75 automated tests passing.
+- TypeScript checks passing.
+- Production build successful.
+- Existing live investigation engine.
+- Four baseline providers: Linear, Notion, Gmail, ServiceNow.
+- Additional known provider registry entries.
+- 14-section implementation guide.
+- CPM planning and dependency graph.
+- Evidence provenance and uncertainty model.
+- SSRF-safe documentation retrieval.
+- Flexible investigation intake implemented.
+- Shareable read-only plan URLs implemented.
+- GitHub export and deployment not yet completed.
+
+Treat these as reported baseline facts. Independently inspect the actual current codebase and verify them before relying on them.
+
+---
+
+# PHASE 0 — SOURCE OF TRUTH AND SCOPE LOCK
+
+## 0.1 Inspect the original assignment
+
+Locate and read the original Composio APM Integrations Take-Home Assignment document.
+
+Use the assignment as the authoritative evaluation source.
+
+Extract every explicit requirement, evaluator expectation, deliverable, constraint, and instruction.
+
+Do not replace the assignment with generic SaaS best practices or invented evaluator expectations.
+
+Create a requirement-to-implementation traceability matrix.
+
+For every assignment requirement, identify:
+- Exact requirement.
+- Relevant application feature.
+- Implementation location.
+- User-visible behavior.
+- Test coverage.
+- Evidence needed to demonstrate compliance.
+- Final status.
+
+## 0.2 Inspect the complete application
+
+Inspect the actual source code, configuration, tests, and UI.
+
+At minimum, examine:
+
+- `src/App.tsx`
+- `src/components/layout/AppShell.tsx`
+- `src/components/pages/DiscoveryPage.tsx`
+- `src/components/pages/InvestigationsPage.tsx`
+- `src/components/pages/ReadinessPage.tsx`
+- `src/components/pages/PlannerPage.tsx`
+- `src/components/pages/GuidesPage.tsx`
+- `src/components/pages/ReportsPage.tsx`
+- `src/components/pages/SettingsPage.tsx`
+- `src/server/data/mockData.ts`
+- `src/server/middleware/validate.ts`
+- `src/server/services/investigationService.ts`
+- `src/server/services/docRetrievalService.ts`
+- `src/server/services/extractionService.ts`
+- `src/server/services/plannerService.ts`
+- `src/server/routes/api.ts`
+- `src/shared/types.ts`
+- Existing test files.
+- `package.json`
+- `.env.example`
+- `.gitignore`
+- `.npmrc`
+- `README.md`
+- Existing production and deployment configuration.
+
+Inspect all other relevant files discovered during the audit.
+
+Do not rely on previous AI-generated summaries or code descriptions.
+
+## 0.3 Scope lock
+
+The application already has substantial functionality.
+
+Do not rebuild the product.
+
+Do not add features merely to make the application larger.
+
+Do not introduce:
+- Paid services.
+- Paid APIs.
+- Payment requirements.
+- Unnecessary databases.
+- Unnecessary authentication systems.
+- Enterprise infrastructure.
+- Unnecessary dependencies.
+- Unrequested dashboards.
+- Cosmetic features that do not improve assignment performance.
+
+Focus on assignment compliance, correctness, reliability, evidence quality, security, usability, and a successful evaluator experience.
+
+---
+
+# PHASE 1 — COMPLETE ASSIGNMENT COMPLIANCE AUDIT
+
+Evaluate every requirement in the original assignment.
+
+Use these statuses:
+
+- PASS: Directly verified in the implementation and supported by actual evidence.
+- PARTIAL: Functionality exists but has a meaningful limitation.
+- FAIL: Requirement is missing or broken.
+- NOT VERIFIED: Evidence is insufficient to establish the result.
+
+Never mark something PASS based solely on comments, intended behavior, mockups, or previous AI reports.
+
+For every requirement, include:
+1. Actual code location.
+2. Actual UI behavior.
+3. Relevant test.
+4. Manual verification status.
+5. Impact on evaluation.
+6. Required correction, if any.
+
+## Core assignment requirements
+
+### A. OAuth application discovery and readiness
+
+Verify that a developer can discover a relevant OAuth provider and understand its setup requirements.
+
+Test:
+- Provider search.
+- Provider selection.
+- Filtering.
+- Readiness dimensions.
+- Evidence display.
+- Navigation between discovery and investigation.
+- Empty search results.
+- Invalid provider names.
+- No-result states.
+- Clear next actions.
+
+Confirm the application helps answer:
+
+"What do I need to know before committing to this OAuth integration?"
+
+### B. Varied real OAuth applications
+
+Verify that the baseline providers represent genuinely different setup challenges.
+
+Inspect:
+- Linear.
+- Notion.
+- Gmail.
+- ServiceNow.
+
+Confirm that their differences are meaningful and grounded in provider-specific documentation.
+
+Examples of intended distinctions:
+- OAuth security and token lifecycle.
+- Internal versus public integrations.
+- Scope sensitivity and verification.
+- Enterprise administration and instance-specific configuration.
+
+Verify every provider claim independently against the actual cited documentation.
+
+Do not assume previously reported claims are correct.
+
+Do not invent provider policies, approval timelines, authentication behavior, or requirements.
+
+### C. Unfamiliar application submission
+
+This is a critical evaluator scenario.
+
+The assignment allows submission by application name OR website.
+
+Test all cases:
+
+1. Known provider name only.
+2. Known provider URL only.
+3. Unfamiliar provider name only.
+4. Unfamiliar provider URL only.
+5. Name and URL together.
+6. Empty name and URL.
+7. Invalid URL.
+8. URL with an unsupported protocol.
+9. URL with credentials embedded.
+10. URL containing suspicious or unsafe destinations.
+11. App name containing unusual characters.
+12. Duplicate investigation.
+13. Existing provider name with an incorrect URL.
+14. Name inferred from URL.
+15. User correction of inferred name.
+
+Expected behavior:
+
+- Name-only submissions must be accepted as input.
+- Known provider names should resolve only through verified registry entries.
+- Unfamiliar names must not trigger fabricated documentation URLs.
+- If a reliable official documentation URL cannot be found, the user must receive a clear, actionable next step.
+- URL-only submissions should derive a provisional application name.
+- Derived names must be clearly identified as inferred.
+- Users should be able to correct inferred names.
+- Both-field submissions must preserve user input appropriately.
+- Empty and malformed submissions must receive useful validation messages.
+
+Distinguish successful intake from successful investigation.
+
+Do not claim an investigation occurred if the application merely accepted the name and requested a documentation URL.
+
+### D. Genuine live investigation
+
+Verify that the application retrieves and analyzes real public documentation.
+
+Test:
+
+1. Existing provider documentation.
+2. A previously unfamiliar OAuth provider.
+3. A valid official documentation URL.
+4. A valid page with little OAuth information.
+5. A page containing relevant OAuth information.
+6. A documentation page with insufficient evidence.
+7. A page that cannot be retrieved.
+8. An unsupported content type.
+9. A retrieval timeout.
+10. A documentation source that redirects.
+11. An invalid or inaccessible domain.
+12. An investigation that produces partial results.
+
+Confirm that:
+
+- The investigation is genuinely based on retrieved source material.
+- Seeded provider data is not presented as newly discovered live research.
+- Live and baseline results are clearly distinguishable.
+- The user can see what the agent actually investigated.
+- The application does not invent results when retrieval fails.
+- The deterministic fallback works when the optional AI model is unavailable.
+- Model unavailability does not falsely imply that live investigation succeeded.
+- Errors are understandable and recoverable.
+
+### E. Evidence and claim verification
+
+Audit the complete evidence model.
+
+Inspect every evidence status, confidence level, source field, and validation rule.
+
+Test:
+- Missing source URL.
+- Invalid source URL.
+- Missing source title.
+- Missing supporting excerpt.
+- Missing checked date.
+- Irrelevant excerpt.
+- Title-only evidence.
+- Evidence with limited applicability.
+- Unknown provider requirements.
+- Conflicting evidence.
+- Unverified claims.
+- Expired or outdated evidence.
+- A source that supports only part of a claim.
+
+Verify that official_verified claims cannot be accepted without the required evidence.
+
+Confirm that the system distinguishes:
+
+- Officially documented facts.
+- Independently corroborated information.
+- Estimates.
+- Project assumptions.
+- Hypotheses.
+- Unknowns.
+
+Do not treat a source URL as proof by itself.
+
+Do not treat keyword matching as a complete semantic verification system.
+
+Ensure that confidence and evidence labels are visible and understandable.
+
+### F. Investigation learning, corrections, and uncertainty
+
+Verify that the product demonstrates responsible investigation.
+
+Confirm that the guide or investigation shows:
+
+- What was investigated.
+- What was supported by evidence.
+- What was corrected.
+- What remains uncertain.
+- What requires additional verification.
+- What the user should do next.
+
+Check that the Linear rate-limit correction and other documented corrections are actually grounded in evidence.
+
+Do not invent a correction history.
+
+Do not claim the application independently verified something when it merely copied a source.
+
+### G. Effort, timing, approvals, and blockers
+
+Verify that the application clearly distinguishes:
+
+- Hands-on engineering effort.
+- External waiting time.
+- Elapsed calendar time.
+- Critical-path duration.
+- Dependencies.
+- Approval gates.
+- Uncertain timing.
+- Assumed working hours.
+- Human prerequisites.
+
+Test:
+- No external approval.
+- Conditional approval.
+- Unknown approval timing.
+- Missing administrator access.
+- Missing OAuth credentials.
+- Provider verification.
+- Scope approval.
+- Organization-level permissions.
+- Resource-access configuration.
+- Failed or delayed approval.
+
+Confirm that the user can understand why the estimated timeline may change.
+
+Do not present estimates as guaranteed completion dates.
+
+Do not fabricate provider review times.
+
+Clearly distinguish documented timelines from project assumptions.
+
+### H. Agent versus human responsibilities
+
+Verify that the application explicitly separates:
+
+- Tasks the agent can prepare.
+- Tasks the agent can investigate.
+- Tasks the agent can partially automate.
+- Tasks requiring a developer.
+- Tasks requiring an administrator.
+- Tasks requiring provider approval.
+- Tasks requiring access to credentials or private accounts.
+
+Check that human takeover points are clear.
+
+The product must not imply that an agent can approve a provider application, create credentials without authorization, or complete tasks requiring inaccessible human authority.
+
+### I. Complete implementation guide
+
+Inspect the actual generated guide.
+
+Verify that it is useful to a developer without the creator explaining it.
+
+Check that it contains:
+
+- Provider and integration context.
+- Setup prerequisites.
+- OAuth application registration.
+- Redirect URI configuration.
+- Scope and permission configuration.
+- Approval and administrator requirements.
+- Token lifecycle considerations.
+- Backend integration.
+- Resource access.
+- Security validation.
+- Functional testing.
+- Production-readiness considerations.
+- Required inputs.
+- Task ownership.
+- Dependencies.
+- Acceptance criteria.
+- Evidence and sources.
+- Known unknowns.
+- Next actions.
+
+Preserve the existing 14-section guide if it meets the assignment.
+
+Do not add sections merely to increase the count.
+
+### J. Shareable guide and plan URLs
+
+This is another critical evaluator scenario.
+
+Inspect the current implementation of:
+
+- `?plan=<id>`
+- `?guide=<id>`
+- Copy Shareable Link.
+- Read-only shared view.
+- Plan persistence.
+- Guide retrieval.
+- Missing-plan handling.
+- Shared-view navigation.
+
+Test:
+
+1. Generate a new plan.
+2. Copy its shareable URL.
+3. Open the URL in a new browser tab.
+4. Open the URL in a fresh/incognito session.
+5. Open a valid URL after a normal page refresh.
+6. Open a URL with an invalid ID.
+7. Open a URL for a deleted or unavailable plan.
+8. Open a URL after the server restarts.
+9. Open a URL after the application container is re-provisioned, if this can be tested.
+10. Open a shared URL without the creator's browser state.
+11. Attempt to edit a shared plan.
+12. Exit shared read-only mode.
+13. Navigate normally without share parameters.
+14. Copy a guide link from the guide library.
+15. Open the copied guide link.
+
+Verify that:
+
+- The correct guide is displayed.
+- The application does not silently load a different seeded plan.
+- Shared mode is read-only.
+- Editing controls are hidden or disabled appropriately.
+- The link uses the actual application origin.
+- No localhost URL is generated for a deployed application.
+- Missing data produces an honest and useful message.
+- Storage limitations are accurately disclosed.
+- A link is not advertised as permanently shareable if its data can disappear.
+
+If true cross-session sharing is impossible with current storage, identify the limitation and implement the smallest zero-cost reliable solution compatible with the assignment.
+
+Do not add paid infrastructure.
+
+### K. Product usability
+
+Inspect the actual UI as a first-time evaluator.
+
+Verify:
+- Clear navigation.
+- Clear terminology.
+- No unexplained acronyms.
+- No unnecessary jargon.
+- No confusing empty states.
+- No broken buttons.
+- No dead navigation links.
+- No misleading status labels.
+- No contradictory information.
+- No false success notifications.
+- No confusing loading states.
+- No hidden critical functionality.
+- No unreadable content.
+- No accidental disclosure of internal debugging information.
+
+Confirm that the product clearly communicates its purpose within the first minute.
+
+The user should understand:
+
+"What is this app, what problem does it solve, and what should I do first?"
+
+Do not redesign the existing UI unless an actual usability defect is found.
+
+---
+
+# PHASE 2 — SECURITY AND PRIVACY AUDIT
+
+Security is a priority because the product retrieves external documentation and processes OAuth-related information.
+
+Inspect the actual implementation.
+
+## A. SSRF protection
+
+Test:
+- `localhost`.
+- IPv4 loopback.
+- Private IPv4 addresses.
+- Link-local addresses.
+- Cloud metadata endpoints.
+- IPv4-mapped IPv6.
+- Private IPv6.
+- Reserved address ranges.
+- DNS rebinding attempts.
+- Redirects to unsafe destinations.
+- Multiple redirect chains.
+- Mixed public and private DNS results.
+- Malformed hostnames.
+- Unsupported protocols.
+- Embedded credentials.
+- Oversized responses.
+- Excessive redirects.
+- Timeouts.
+
+Verify that every redirect destination is revalidated.
+
+Verify that DNS resolution cannot bypass the intended security controls.
+
+Do not weaken security protections to make an investigation succeed.
+
+## B. Documentation retrieval
+
+Test:
+- HTTPS.
+- HTTP handling.
+- TLS validation.
+- Hostname validation.
+- Content type restrictions.
+- Response size limits.
+- Timeout handling.
+- Error handling.
+- Unsupported formats.
+- Malformed HTML.
+- Empty pages.
+- Unexpected responses.
+
+Confirm that failures are visible and do not produce fabricated evidence.
+
+## C. Secrets and credentials
+
+Inspect:
+- `.env`
+- `.env.example`
+- `.gitignore`
+- Logs.
+- API responses.
+- Browser-visible configuration.
+- Test fixtures.
+- Local persistence.
+- Generated guides.
+- Git repository contents.
+
+Ensure that:
+- No API keys are committed.
+- No OAuth client secrets are exposed.
+- No access tokens are logged.
+- No refresh tokens are logged.
+- No private credentials appear in generated reports.
+- No real user credentials are included in fixtures.
+- `.env.example` contains placeholders only.
+
+Do not claim a complete secrets audit unless the repository was actually inspected.
+
+## D. Data handling
+
+Inspect how investigations, plans, and reports are stored.
+
+Clearly identify:
+- In-memory data.
+- Filesystem persistence.
+- Browser state.
+- Temporary state.
+- Data that survives process restarts.
+- Data that does not survive container replacement.
+
+Do not claim database-grade durability when the application uses local JSON files.
+
+## E. API validation
+
+Test every existing API endpoint.
+
+Verify:
+- Correct HTTP methods.
+- Input validation.
+- Error responses.
+- Invalid IDs.
+- Missing fields.
+- Malformed JSON.
+- Oversized input.
+- Unsupported parameters.
+- Unexpected data types.
+- Unauthorized mutation attempts where relevant.
+- Appropriate response structure.
+
+Do not introduce authentication requirements that are unnecessary for this take-home assignment.
+
+---
+
+# PHASE 3 — COMPLETE FUNCTIONAL TEST MATRIX
+
+Create or update automated tests for every meaningful user journey and critical edge case.
+
+At minimum, test:
+
+## Investigation tests
+- Name-only known provider.
+- Name-only unfamiliar provider.
+- URL-only provider.
+- Both fields.
+- Empty input.
+- Malformed URL.
+- Invalid protocol.
+- Derived application name.
+- Corrected derived name.
+- Registry match.
+- Registry miss.
+- Successful retrieval.
+- Retrieval failure.
+- Deterministic fallback.
+- Evidence extraction.
+- Missing evidence.
+- Investigation persistence behavior.
+
+## Planner tests
+- Plan generation.
+- Task dependency ordering.
+- Critical path calculation.
+- Slack calculation.
+- Effort calculation.
+- External wait calculation.
+- Agent/human ownership.
+- Unknown dependency handling.
+- Missing prerequisite.
+- Invalid task.
+- Timeline assumptions.
+- Plan export.
+- Plan retrieval.
+- Plan persistence.
+- Shareable URL generation.
+- Invalid plan ID.
+- Read-only shared view.
+- Mutation prevention.
+- Normal editable mode.
+
+## Guide tests
+- Guide generation.
+- All required sections.
+- Source references.
+- Evidence labels.
+- Known unknowns.
+- Task ownership.
+- Next actions.
+- Markdown export.
+- JSON export.
+- Shareable guide links.
+- Guide loading.
+- Missing guide handling.
+
+## UI tests
+
+Where the existing project supports UI testing, test:
+- Form submission.
+- Field validation.
+- Loading states.
+- Error states.
+- Copy-link interaction.
+- Shared read-only behavior.
+- Navigation.
+- Empty states.
+- Correct guide display.
+
+If UI automation is unavailable, perform actual manual browser verification and clearly report it.
+
+Do not claim browser testing from unit tests alone.
+
+---
+
+# PHASE 4 — BUILD, RUNTIME, AND PRODUCTION VERIFICATION
+
+Run the actual commands available in the project.
+
+At minimum:
+
+```bash
+npm test
+npm run lint
+npm run build
+```
+
+Also verify:
+
+```bash
+npm ci
+```
+
+Use the project's documented installation procedure and preserve the required `.npmrc` configuration.
+
+Do not change dependency versions unnecessarily.
+
+Verify:
+- Clean installation.
+- Test execution.
+- TypeScript checks.
+- Production frontend compilation.
+- Production server startup.
+- API health endpoint.
+- Provider endpoints.
+- Investigation endpoint.
+- Plan generation endpoint.
+- Plan retrieval endpoint.
+- Export endpoint.
+- SPA fallback.
+- Production asset loading.
+- Correct PORT behavior.
+- Correct production environment behavior.
+
+If the current application supports a production start command, run it.
+
+Do not assume that a successful Vite build proves the Express production server works.
+
+Do not assume a health endpoint proves every route works.
+
+---
+
+# PHASE 5 — ZERO-BUDGET VERIFICATION
+
+Strictly preserve ₹0 operating cost.
+
+Inspect:
+- Dependencies.
+- External API calls.
+- Gemini configuration.
+- Environment variables.
+- Hosting assumptions.
+- Documentation retrieval.
+- Optional AI fallback.
+- Billing-related configuration.
+
+Confirm:
+- Deterministic investigation works without paid AI.
+- No paid service is mandatory.
+- No payment method is required for local operation.
+- No hidden paid API dependency was introduced.
+- No automatic cloud billing is introduced.
+- Optional AI behavior is accurately disclosed.
+- No paid service is represented as free without verification.
+
+Do not guarantee free public hosting unless the actual platform eligibility and limitations have been verified.
+
+---
+
+# PHASE 6 — REPOSITORY AND README AUDIT
+
+Inspect the actual repository before export.
+
+Verify:
+
+- No secrets.
+- No unnecessary generated files.
+- No `node_modules`.
+- No build artifacts unless intentionally required.
+- No unrelated temporary files.
+- No personal credentials.
+- No hidden AI Studio environment dependencies.
+- No broken imports.
+- No missing configuration.
+- No unnecessary dependencies.
+- No unsupported setup claims.
+
+## README must explain
+
+1. Product purpose.
+2. Problem being solved.
+3. Core user journey.
+4. Features.
+5. Technology stack.
+6. Local setup.
+7. Environment variables.
+8. Optional AI configuration.
+9. Zero-cost deterministic mode.
+10. Running tests.
+11. Production build.
+12. Production startup.
+13. API endpoints.
+14. Evidence and confidence model.
+15. Investigation limitations.
+16. Security controls.
+17. Persistence limitations.
+18. Known uncertainties.
+19. Current project scope.
+20. How to use the application.
+
+Do not claim that the application is production-ready if the project is only a take-home prototype.
+
+The README should be clear, concise, professional, and truthful.
+
+---
+
+# PHASE 7 — FINAL EVALUATOR SIMULATION
+
+Act as a strict Composio evaluator.
+
+Do not provide the creator with special instructions.
+
+Start from a fresh application session.
+
+Attempt the following complete journey:
+
+1. Open the application.
+2. Understand its purpose without reading the README.
+3. Find a known OAuth application.
+4. Understand its readiness and evidence.
+5. Submit an unfamiliar OAuth application by name.
+6. If documentation is required, understand why and provide it.
+7. Observe genuine live documentation investigation.
+8. Review source evidence and uncertainty.
+9. Generate a guide.
+10. Understand required implementation work.
+11. Understand effort estimates and external waits.
+12. Understand what the agent can prepare.
+13. Understand what requires a human.
+14. Identify the primary blocker.
+15. Copy the shareable guide URL.
+16. Open it in a fresh session.
+17. Follow the guide without asking the creator for clarification.
+
+At every step, record:
+- What the evaluator sees.
+- What the evaluator understands.
+- What is confusing.
+- What fails.
+- What requires creator assistance.
+- Whether the assignment requirement is satisfied.
+
+If the evaluator cannot complete a critical step, fix the actual issue rather than hiding it.
+
+---
+
+# PHASE 8 — FINAL TARGETED FIXES
+
+After completing the audits:
+
+1. Identify every assignment-critical defect.
+2. Identify every security-critical defect.
+3. Identify every data-integrity defect.
+4. Identify every deployment-blocking defect.
+5. Identify every broken user journey.
+6. Identify every misleading product claim.
+7. Identify every README or repository issue.
+
+Implement only the minimum necessary fixes.
+
+Preserve all existing working functionality.
+
+Do not introduce optional features.
+
+Do not make speculative improvements.
+
+Do not make changes solely to increase code volume.
+
+If a critical issue cannot be fixed safely within the existing architecture, document it explicitly and explain its impact.
+
+---
+
+# PHASE 9 — FINAL REGRESSION AND FREEZE
+
+After all fixes:
+
+1. Run the complete test suite.
+2. Run TypeScript validation.
+3. Run the production build.
+4. Run production startup verification.
+5. Verify the health endpoint.
+6. Verify the main investigation journey.
+7. Verify guide generation.
+8. Verify shareable URL behavior.
+9. Verify shared read-only behavior.
+10. Verify SSRF protections.
+11. Verify the repository and README.
+12. Confirm no paid service or billing was introduced.
+
+Do not report passing tests unless they actually executed.
+
+Do not stop after the first successful build.
+
+Do not make additional code changes after final validation unless a critical defect is discovered.
+
+---
+
+# FINAL OUTPUT FORMAT
+
+Provide one comprehensive final report.
+
+## Section 1 — Executive verdict
+
+Choose exactly one:
+
+- SUBMISSION READY — VERIFIED
+- SUBMISSION READY WITH DISCLOSED LIMITATIONS
+- NOT READY — CRITICAL FIXES REQUIRED
+
+Explain why.
+
+## Section 2 — Assignment compliance scorecard
+
+For every original assignment requirement:
+
+- Requirement.
+- Status.
+- Code evidence.
+- Test evidence.
+- Manual verification.
+- Remaining limitation.
+
+## Section 3 — Critical defect register
+
+List every remaining:
+- Assignment-critical defect.
+- Security-critical defect.
+- Data-integrity defect.
+- Deployment blocker.
+- Broken user journey.
+
+If none remain, state that no such defects were identified within the performed audit scope. Do not claim that every possible defect has been eliminated.
+
+## Section 4 — Test execution report
+
+Provide actual results for:
+
+- Installation.
+- Unit tests.
+- Integration tests.
+- UI tests, if available.
+- TypeScript validation.
+- Production build.
+- Production startup.
+- API verification.
+- Security tests.
+- Manual evaluator simulation.
+
+Include commands, actual outcomes, and failures.
+
+## Section 5 — Final application quality assessment
+
+Assess:
+
+- Assignment alignment.
+- Developer usefulness.
+- OAuth domain accuracy.
+- Evidence quality.
+- Agent/human responsibility clarity.
+- Guide usefulness.
+- UX clarity.
+- Security.
+- Reliability.
+- ₹0 compliance.
+- Repository readiness.
+- Deployment readiness.
+
+Do not invent scores or claim world rankings.
+
+## Section 6 — Final limitations
+
+List all meaningful limitations that remain.
+
+Distinguish:
+- Assignment limitations.
+- Prototype limitations.
+- Persistence limitations.
+- Hosting limitations.
+- Evidence limitations.
+- Features intentionally excluded.
+
+Do not hide limitations.
+
+## Section 7 — GitHub export readiness
+
+Confirm whether:
+- Source code is clean.
+- README is complete.
+- Secrets are absent.
+- Setup is reproducible.
+- Tests pass.
+- Production build works.
+- No unnecessary files remain.
+
+Choose:
+- EXPORT NOW
+- FIX BEFORE EXPORT
+
+## Section 8 — Deployment readiness
+
+Choose:
+- READY FOR DEPLOYMENT
+- READY FOR DEPLOYMENT WITH LIMITATIONS
+- NOT READY
+
+Do not claim deployment was completed unless it actually happened.
+
+## Section 9 — Final freeze declaration
+
+If all required checks pass, state:
+
+"The application has completed the assignment-focused verification process. No further feature development is recommended before submission. The codebase should remain frozen unless a new critical defect is discovered."
+
+If checks fail, do not issue the freeze declaration.
+
+---
+
+# FINAL OPERATING PRINCIPLE
+
+The objective is not to create the largest possible OAuth product.
+
+The objective is to create the clearest, most useful, reliable, evidence-backed experience for the exact Composio assignment.
+
+Prioritize:
+- Correctness over complexity.
+- Evidence over confident claims.
+- Useful guidance over feature count.
+- Reliable live investigation over impressive mockups.
+- Clear agent/human boundaries over automation promises.
+- Assignment compliance over speculative product enhancements.
+- Honest verification over self-reported success.
+
+Complete the audit and necessary fixes in one focused pass.
+
+Do not ask for approval between individual fixes.
+
+Do not add optional features.
+
+Do not push to GitHub.
+
+Do not deploy.
+
+Do not claim perfection or a guaranteed world ranking.
+
+Deliver the final evidence-backed report and stop.

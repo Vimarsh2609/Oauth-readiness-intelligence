@@ -1,0 +1,6 @@
+{
+  "name": "OAuth Readiness Intelligence",
+  "description": "Know the work before you commit to the integration. Understand effort, requirements, risks, dependencies, and approval processes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

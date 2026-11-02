@@ -1,0 +1,903 @@
+[
+  {
+    "id": "plan_inv_discord_demo",
+    "investigationId": "inv_discord_demo",
+    "appName": "Discord",
+    "docUrl": "https://discord.com/developers/docs/topics/oauth2",
+    "authMethod": "OAuth 2.0 PKCE",
+    "createdAt": "2026-11-02T15:30:46.795Z",
+    "updatedAt": "2026-11-02T15:30:46.797Z",
+    "storageInfo": {
+      "storageType": "local_file_json",
+      "filePath": "data/plans.json",
+      "survivesServerRestart": true,
+      "survivesBrowserRefresh": true,
+      "persistenceNote": "Durable local file-based JSON storage on container filesystem (data/plans.json). Survives browser refresh and server process restarts; resets on container re-provisioning."
+    },
+    "tasks": [
+      {
+        "id": "task_discord_app_reg",
+        "taskId": "task_discord_app_reg",
+        "title": "Register Discord OAuth Application in Developer Portal",
+        "taskTitle": "Register Discord OAuth Application in Developer Portal",
+        "description": "Create an OAuth 2.0 application entry in the official Discord Developer Console. Retrieve Client ID and configure basic application branding.",
+        "category": "human_required",
+        "functionalCategory": "application_registration",
+        "responsibleParty": "human_required",
+        "provenance": "UNVERIFIED_DEPENDENCY",
+        "status": "completed",
+        "priority": "critical",
+        "providerName": "Discord",
+        "requiredInputs": [
+          "Developer Portal login credentials",
+          "Application name & icon",
+          "Privacy Policy URL"
+        ],
+        "dependencies": [],
+        "supportingClaimIds": [],
+        "evidenceStatus": "recommended_practice",
+        "completionCriteria": "Client ID provisioned and stored in developer secrets vault.",
+        "estimatedHours": 1,
+        "humanOwnerRole": "Engineering Lead / DevOps",
+        "earliestStartHour": 0,
+        "earliestFinishHour": 1,
+        "latestStartHour": 0,
+        "latestFinishHour": 1,
+        "slack": 0,
+        "isCriticalPath": true
+      },
+      {
+        "id": "task_discord_oauth_config",
+        "taskId": "task_discord_oauth_config",
+        "title": "Configure Authorization Code Grant & PKCE Parameters",
+        "taskTitle": "Configure Authorization Code Grant & PKCE Parameters",
+        "description": "Implement RFC 7636 PKCE S256 code challenge generation and authorization code exchange handlers per official recommendation.",
+        "category": "agent_prepared",
+        "functionalCategory": "oauth_configuration",
+        "responsibleParty": "agent_prepared",
+        "provenance": "PROVIDER_DOCUMENTED",
+        "status": "blocked",
+        "priority": "critical",
+        "providerName": "Discord",
+        "requiredInputs": [
+          "Client ID",
+          "Grant type: authorization_code",
+          "PKCE S256 helper"
+        ],
+        "dependencies": [
+          "task_discord_app_reg"
+        ],
+        "supportingClaimIds": [
+          "claim_discord_1"
+        ],
+        "evidenceStatus": "official_verified",
+        "completionCriteria": "Authorization request URL generator and code exchange client successfully constructed.",
+        "estimatedHours": 4,
+        "automationCapabilityNote": "Autonomous scaffolding can generate RFC 7636 Web Crypto verifier/challenge utilities.",
+        "earliestStartHour": 1,
+        "earliestFinishHour": 5,
+        "latestStartHour": 1,
+        "latestFinishHour": 5,
+        "slack": 0,
+        "isCriticalPath": true,
+        "blockerInfo": {
+          "isBlocked": true,
+          "blockedReason": "Waiting on secret rotation"
+        },
+        "blockerReason": "Waiting on secret rotation"
+      },
+      {
+        "id": "task_discord_redirect_uri",
+        "taskId": "task_discord_redirect_uri",
+        "title": "Configure Strict HTTPS Redirect URIs in Developer Console",
+        "taskTitle": "Configure Strict HTTPS Redirect URIs in Developer Console",
+        "description": "Register staging and production OAuth callback endpoints (Discord enforces strict redirect URI matching; wildcard paths are forbidden).",
+        "category": "human_required",
+        "functionalCategory": "redirect_uri_setup",
+        "responsibleParty": "human_required",
+        "provenance": "PROVIDER_DOCUMENTED",
+        "status": "pending",
+        "priority": "high",
+        "providerName": "Discord",
+        "requiredInputs": [
+          "Production HTTPS callback domain",
+          "Staging HTTPS callback domain",
+          "Local development URI"
+        ],
+        "dependencies": [
+          "task_discord_app_reg"
+        ],
+        "supportingClaimIds": [],
+        "evidenceStatus": "recommended_practice",
+        "completionCriteria": "Redirect URI verified and saved in Developer Console without wildcard characters.",
+        "estimatedHours": 1,
+        "humanOwnerRole": "DevOps / Platform Engineer",
+        "earliestStartHour": 1,
+        "earliestFinishHour": 2,
+        "latestStartHour": 14,
+        "latestFinishHour": 15,
+        "slack": 13,
+        "isCriticalPath": false
+      },
+      {
+        "id": "task_discord_scope_config",
+        "taskId": "task_discord_scope_config",
+        "title": "Specify and Justify Minimal Scope Permissions (identify, email, guilds)",
+        "taskTitle": "Specify and Justify Minimal Scope Permissions (identify, email, guilds)",
+        "description": "Define exact OAuth scopes requested during authorization. Ensure compliance with principle of least privilege.",
+        "category": "agent_prepared",
+        "functionalCategory": "scope_configuration",
+        "responsibleParty": "agent_prepared",
+        "provenance": "PROVIDER_DOCUMENTED",
+        "status": "pending",
+        "priority": "high",
+        "providerName": "Discord",
+        "requiredInputs": [
+          "Scope list: identify, email, guilds",
+          "Feature functional mapping"
+        ],
+        "dependencies": [
+          "task_discord_oauth_config"
+        ],
+        "supportingClaimIds": [
+          "identify",
+          "email",
+          "guilds"
+        ],
+        "evidenceStatus": "independently_corroborated",
+        "completionCriteria": "Scope string constructed and verified against developer permission requirements.",
+        "estimatedHours": 2,
+        "automationCapabilityNote": "Scope manifest and justification documentation can be drafted autonomously.",
+        "earliestStartHour": 5,
+        "earliestFinishHour": 7,
+        "latestStartHour": 8,
+        "latestFinishHour": 10,
+        "slack": 3,
+        "isCriticalPath": false
+      },
+      {
+        "id": "task_discord_admin_approval",
+        "taskId": "task_discord_admin_approval",
+        "title": "Obtain Workspace / Tenant Administrator Authorization",
+        "taskTitle": "Obtain Workspace / Tenant Administrator Authorization",
+        "description": "Coordinate with customer IT / security administrators to pre-authorize integration or approve tenant-wide permissions.",
+        "category": "human_required",
+        "functionalCategory": "administrator_approval",
+        "responsibleParty": "human_required",
+        "provenance": "PROJECT_ASSUMPTION",
+        "status": "pending",
+        "priority": "critical",
+        "providerName": "Discord",
+        "requiredInputs": [
+          "Application architecture summary",
+          "Data access justification",
+          "Tenant admin credentials"
+        ],
+        "dependencies": [
+          "task_discord_scope_config"
+        ],
+        "supportingClaimIds": [],
+        "evidenceStatus": "independently_corroborated",
+        "completionCriteria": "Admin consent granted or verified that user self-service authorization is active.",
+        "estimatedHours": 6,
+        "externalWaitDays": "2 – 5 business days",
+        "humanOwnerRole": "IT Administrator / Security Officer",
+        "earliestStartHour": 7,
+        "earliestFinishHour": 13,
+        "latestStartHour": 10,
+        "latestFinishHour": 16,
+        "slack": 3,
+        "isCriticalPath": false
+      },
+      {
+        "id": "task_discord_provider_verification",
+        "taskId": "task_discord_provider_verification",
+        "title": "Submit Discord App Review & Verification (Conditional: Public Distribution / Scale)",
+        "taskTitle": "Submit Discord App Review & Verification (Conditional: Public Distribution / Scale)",
+        "description": "Discord OAuth applications operate self-service with zero approval delay. Bot verification is ONLY required when reaching 75 or more guilds.",
+        "category": "human_required",
+        "functionalCategory": "external_provider_verification",
+        "responsibleParty": "human_required",
+        "provenance": "UNVERIFIED_DEPENDENCY",
+        "status": "pending",
+        "priority": "medium",
+        "providerName": "Discord",
+        "requiredInputs": [
+          "Privacy Policy URL",
+          "Demo video recording",
+          "Production app URL"
+        ],
+        "dependencies": [
+          "task_discord_redirect_uri",
+          "task_discord_scope_config"
+        ],
+        "supportingClaimIds": [],
+        "evidenceStatus": "recommended_practice",
+        "completionCriteria": "Application review submitted to vendor and pending approval or self-service verified.",
+        "estimatedHours": 4,
+        "externalWaitDays": "0 business days (instant self-service for standard OAuth)",
+        "humanOwnerRole": "Product Manager / Compliance Officer",
+        "earliestStartHour": 7,
+        "earliestFinishHour": 11,
+        "latestStartHour": 15,
+        "latestFinishHour": 19,
+        "slack": 8,
+        "isCriticalPath": false
+      },
+      {
+        "id": "task_discord_resource_access",
+        "taskId": "task_discord_resource_access",
+        "title": "Implement Granular Resource Access Boundaries & Sharing Validation",
+        "taskTitle": "Implement Granular Resource Access Boundaries & Sharing Validation",
+        "description": "Configure application logic to handle Guild owner or administrator installs integration. and gracefully handle unauthorized resource errors.",
+        "category": "agent_prepared",
+        "functionalCategory": "resource_access_configuration",
+        "responsibleParty": "agent_prepared",
+        "provenance": "GENERIC_ENGINEERING_RECOMMENDATION",
+        "status": "pending",
+        "priority": "medium",
+        "providerName": "Discord",
+        "requiredInputs": [
+          "Resource ID mapping",
+          "Permission boundary model"
+        ],
+        "dependencies": [
+          "task_discord_scope_config"
+        ],
+        "supportingClaimIds": [],
+        "evidenceStatus": "recommended_practice",
+        "completionCriteria": "Resource authorization validation middleware operational.",
+        "estimatedHours": 3,
+        "automationCapabilityNote": "Resource permission check guards can be prepared deterministically.",
+        "earliestStartHour": 7,
+        "earliestFinishHour": 10,
+        "latestStartHour": 18,
+        "latestFinishHour": 21,
+        "slack": 11,
+        "isCriticalPath": false
+      },
+      {
+        "id": "task_discord_token_lifecycle",
+        "taskId": "task_discord_token_lifecycle",
+        "title": "Implement Token Storage, Expiration Timer & Safe Refresh Token Handling",
+        "taskTitle": "Implement Token Storage, Expiration Timer & Safe Refresh Token Handling",
+        "description": "Configure encrypted token storage and 604,800-second access token expiration timer (7 days per documented exchange schema). Note: Provider-specific refresh-token rotation semantics (single-use vs multi-use) are undocumented in official Discord guides; mutex locking is recommended as a generic safety practice.",
+        "category": "agent_prepared",
+        "functionalCategory": "token_lifecycle_implementation",
+        "responsibleParty": "agent_prepared",
+        "provenance": "GENERIC_ENGINEERING_RECOMMENDATION",
+        "status": "pending",
+        "priority": "critical",
+        "providerName": "Discord",
+        "requiredInputs": [
+          "Encrypted token database schema",
+          "TTL expiration timer",
+          "Token refresh handler"
+        ],
+        "dependencies": [
+          "task_discord_oauth_config"
+        ],
+        "supportingClaimIds": [
+          "claim_discord_3"
+        ],
+        "evidenceStatus": "official_verified",
+        "completionCriteria": "Token expiration timer operational; refresh token handler and locking deployed with error handling for 400 invalid_grant.",
+        "estimatedHours": 5,
+        "automationCapabilityNote": "Token lifecycle handler and expiration state machine can be scaffolded autonomously.",
+        "earliestStartHour": 5,
+        "earliestFinishHour": 10,
+        "latestStartHour": 5,
+        "latestFinishHour": 10,
+        "slack": 0,
+        "isCriticalPath": true
+      },
+      {
+        "id": "task_discord_backend_integration",
+        "taskId": "task_discord_backend_integration",
+        "title": "Construct Discord API Client with Rate Limiting Backoff",
+        "taskTitle": "Construct Discord API Client with Rate Limiting Backoff",
+        "description": "Build API client wrapping token injection, Bearer authentication headers, and automatic retry with exponential backoff on HTTP 429.",
+        "category": "agent_prepared",
+        "functionalCategory": "backend_integration",
+        "responsibleParty": "agent_prepared",
+        "provenance": "PROVIDER_DOCUMENTED",
+        "status": "pending",
+        "priority": "high",
+        "providerName": "Discord",
+        "requiredInputs": [
+          "API base URL",
+          "Rate limit specification",
+          "Token retrieval provider"
+        ],
+        "dependencies": [
+          "task_discord_oauth_config",
+          "task_discord_token_lifecycle"
+        ],
+        "supportingClaimIds": [
+          "claim_discord_4"
+        ],
+        "evidenceStatus": "official_verified",
+        "completionCriteria": "Authenticated API client operational with 429 Retry-After header parsing.",
+        "estimatedHours": 6,
+        "automationCapabilityNote": "API wrapper and backoff queue boilerplate prepared autonomously.",
+        "earliestStartHour": 10,
+        "earliestFinishHour": 16,
+        "latestStartHour": 10,
+        "latestFinishHour": 16,
+        "slack": 0,
+        "isCriticalPath": true
+      },
+      {
+        "id": "task_discord_security_validation",
+        "taskId": "task_discord_security_validation",
+        "title": "Execute OAuth Security Suite (CSRF State, PKCE Verifier & Leakage Prevention)",
+        "taskTitle": "Execute OAuth Security Suite (CSRF State, PKCE Verifier & Leakage Prevention)",
+        "description": "Verify that CSRF state mismatch is rejected, PKCE code_verifier is strictly matched, and access tokens are never transmitted via URL fragments or Referer headers.",
+        "category": "agent_prepared",
+        "functionalCategory": "security_validation",
+        "responsibleParty": "agent_prepared",
+        "provenance": "PROVIDER_DOCUMENTED",
+        "status": "pending",
+        "priority": "critical",
+        "providerName": "Discord",
+        "requiredInputs": [
+          "Automated security test suite",
+          "Adversarial state tampering test cases"
+        ],
+        "dependencies": [
+          "task_discord_backend_integration"
+        ],
+        "supportingClaimIds": [
+          "claim_discord_2"
+        ],
+        "evidenceStatus": "official_verified",
+        "completionCriteria": "All security test cases pass (CSRF rejection, PKCE verification, secret protection).",
+        "estimatedHours": 3,
+        "automationCapabilityNote": "Adversarial security unit tests can be scaffolded deterministically.",
+        "earliestStartHour": 16,
+        "earliestFinishHour": 19,
+        "latestStartHour": 16,
+        "latestFinishHour": 19,
+        "slack": 0,
+        "isCriticalPath": true
+      },
+      {
+        "id": "task_discord_functional_testing",
+        "taskId": "task_discord_functional_testing",
+        "title": "Execute End-to-End User Authorization Flow in Staging Environment",
+        "taskTitle": "Execute End-to-End User Authorization Flow in Staging Environment",
+        "description": "Perform complete walkthrough with test user: initiation -> OAuth consent prompt -> code callback -> token exchange -> authenticated API query.",
+        "category": "human_required",
+        "functionalCategory": "functional_testing",
+        "responsibleParty": "human_required",
+        "provenance": "PROJECT_ASSUMPTION",
+        "status": "pending",
+        "priority": "high",
+        "providerName": "Discord",
+        "requiredInputs": [
+          "Staging deployment URL",
+          "Test user account credentials",
+          "Verification checklist"
+        ],
+        "dependencies": [
+          "task_discord_backend_integration",
+          "task_discord_admin_approval"
+        ],
+        "supportingClaimIds": [],
+        "evidenceStatus": "recommended_practice",
+        "completionCriteria": "End-to-end integration verified from user prompt to database persist.",
+        "estimatedHours": 3,
+        "humanOwnerRole": "QA Engineer / Full-Stack Engineer",
+        "earliestStartHour": 16,
+        "earliestFinishHour": 19,
+        "latestStartHour": 16,
+        "latestFinishHour": 19,
+        "slack": 0,
+        "isCriticalPath": true
+      },
+      {
+        "id": "task_discord_prod_readiness",
+        "taskId": "task_discord_prod_readiness",
+        "title": "Production Deployment, Credential Vaulting & Alerting Sign-off",
+        "taskTitle": "Production Deployment, Credential Vaulting & Alerting Sign-off",
+        "description": "Inject production credentials via environment vault, configure alerts for 401/429 spikes, and execute production release verification.",
+        "category": "human_required",
+        "functionalCategory": "production_readiness",
+        "responsibleParty": "human_required",
+        "provenance": "PROJECT_ASSUMPTION",
+        "status": "pending",
+        "priority": "critical",
+        "providerName": "Discord",
+        "requiredInputs": [
+          "Production secrets vault access",
+          "Datadog / Prometheus alerting rules",
+          "Rollback plan"
+        ],
+        "dependencies": [
+          "task_discord_security_validation",
+          "task_discord_functional_testing",
+          "task_discord_provider_verification"
+        ],
+        "supportingClaimIds": [],
+        "evidenceStatus": "recommended_practice",
+        "completionCriteria": "Production deployment live with zero unhandled OAuth exceptions and active monitoring.",
+        "estimatedHours": 2,
+        "humanOwnerRole": "DevOps / Release Manager",
+        "earliestStartHour": 19,
+        "earliestFinishHour": 21,
+        "latestStartHour": 19,
+        "latestFinishHour": 21,
+        "slack": 0,
+        "isCriticalPath": true
+      }
+    ],
+    "criticalPathTaskIds": [
+      "task_discord_app_reg",
+      "task_discord_oauth_config",
+      "task_discord_token_lifecycle",
+      "task_discord_backend_integration",
+      "task_discord_security_validation",
+      "task_discord_functional_testing",
+      "task_discord_prod_readiness"
+    ],
+    "criticalPathHours": 21,
+    "effort": {
+      "handsOnDevHoursMin": 34,
+      "handsOnDevHoursMax": 52,
+      "handsOnDevHoursLabel": "34 – 52 active developer hours",
+      "assumedProductiveHoursPerDay": 6,
+      "externalWaitDaysMin": 0,
+      "externalWaitDaysMax": 1,
+      "externalWaitDaysLabel": "0 – 1 business days (Instant self-service registration for OAuth applications)",
+      "isExternalWaitDocumented": true,
+      "conditionalVerificationNote": "Conditional Verification Requirement: Bot identity verification and review (estimated 5–10 business days) is triggered ONLY if the bot is added to 75 or more guilds. It is NOT required for basic OAuth 2.0 application integrations.",
+      "totalElapsedDaysMin": 4,
+      "totalElapsedDaysMax": 6,
+      "totalElapsedDaysLabel": "4 – 6 business days (Estimated range based on assumptions; NOT guaranteed)",
+      "isEstimateGuaranteed": false,
+      "disclaimer": "Estimated (Not Guaranteed) — figures reflect engineering modeling based on stated assumptions and are subject to environment variability.",
+      "assumptions": [
+        "Critical path duration (21h) represents the longest sequential path, distinct from total task effort (40h) due to parallel task execution.",
+        "Assumes 1 full-time software engineer dedicated to the integration allocating 6 productive engineering hours/day.",
+        "Estimates reflect realistic engineering variance (±25%) based on environment complexity and testing feedback.",
+        "External approval queues are governed by third-party vendor review queues and cannot be expedited by developer velocity."
+      ],
+      "documentedFacts": [
+        "OAuth grant pattern: Supported / Recommended PKCE verification.",
+        "Token duration specification: 604800 seconds (7 days) for Authorization Code Grant exchange.",
+        "Provider review timeline: Instant self-service registration for OAuth applications."
+      ]
+    },
+    "responsibilityMatrix": {
+      "agentPreparedCount": 6,
+      "humanRequiredCount": 6,
+      "blockedCount": 1,
+      "completedCount": 1,
+      "totalTasks": 12
+    },
+    "risks": [
+      {
+        "riskId": "risk_discord_1",
+        "risk": "Workspace Administrator Installation Block",
+        "cause": "Integration requires tenant administrator pre-approval: Guild Administrator permissions required for bot integration..",
+        "impact": "high",
+        "likelihood": "high",
+        "evidence": "Self-service for standard applications; Bot verification required at 75+ guilds.",
+        "mitigation": "Prepare an enterprise security one-pager detailing required scopes and data retention before initiating tenant rollout.",
+        "owner": "Workspace Administrator",
+        "status": "open"
+      },
+      {
+        "riskId": "risk_discord_2",
+        "risk": "PKCE Challenge Parameter Schema Ambiguity",
+        "cause": "Documentation officially recommends PKCE but does not publish detailed code_challenge / code_verifier schema parameters on primary page.",
+        "impact": "medium",
+        "likelihood": "medium",
+        "evidence": "For production apps, use the authorization code grant with PKCE instead.",
+        "supportingClaimId": "claim_discord_1",
+        "mitigation": "Implement standard RFC 7636 S256 challenge generation and test against sandbox endpoint early during Phase 1.",
+        "owner": "Engineering",
+        "status": "open"
+      },
+      {
+        "riskId": "risk_discord_3",
+        "risk": "Unverified Refresh Token Rotation Semantics",
+        "cause": "Official Discord documentation does not publish refresh token rotation policy (single-use vs multi-use). If single-use rotation is enforced, concurrent refresh calls without locking will trigger 400 invalid_grant.",
+        "impact": "high",
+        "likelihood": "low",
+        "evidence": "Refresh-token rotation policy is undocumented in official Discord developer guides.",
+        "mitigation": "Deploy distributed refresh token mutex lock as a generic safety precaution and log token response headers comprehensively.",
+        "owner": "Engineering",
+        "status": "open"
+      },
+      {
+        "riskId": "risk_discord_4",
+        "risk": "API Rate Limit Throttling (HTTP 429)",
+        "cause": "Dedicated bot rate limits apply; burst requests will trigger 429 responses with Retry-After headers.",
+        "impact": "medium",
+        "likelihood": "medium",
+        "evidence": "Bots have an entirely separate set of rate limits .",
+        "supportingClaimId": "claim_discord_4",
+        "mitigation": "Implement Leaky Bucket or Token Bucket client-side queue with jittered exponential backoff honoring Retry-After headers.",
+        "owner": "Engineering",
+        "status": "open"
+      },
+      {
+        "riskId": "risk_discord_5",
+        "risk": "Undocumented Integration Edge Cases",
+        "cause": "Documentation is silent on key behaviors: Detailed code_challenge schema parameters are not published on the primary topic page.",
+        "impact": "medium",
+        "likelihood": "high",
+        "evidence": "Identified known unknowns in official documentation: Detailed code_challenge schema parameters are not published on the primary topic page.; Global user-token rate limits require consulting the dedicated rate limits documentation.",
+        "mitigation": "Deploy feature flags around optional OAuth capabilities and log token exchange responses comprehensively.",
+        "owner": "Engineering",
+        "status": "open"
+      }
+    ],
+    "guide": {
+      "id": "guide_inv_discord_demo",
+      "planId": "plan_inv_discord_demo",
+      "appName": "Discord",
+      "generatedAt": "2026-11-02T15:30:46.795Z",
+      "sections": [
+        {
+          "sectionNumber": 1,
+          "id": "integration_overview",
+          "title": "1. Integration Overview",
+          "summary": "Architectural blueprint and integration readiness profile for Discord.",
+          "contentMarkdown": "This implementation guide provides verified engineering specifications for integrating with Discord. The design follows the evidence-backed findings extracted from the official developer documentation (https://discord.com/developers/docs/topics/oauth2).",
+          "technicalInstructions": [
+            {
+              "step": "1.1",
+              "instruction": "Target authentication method: OAuth 2.0 PKCE.",
+              "isRecommendation": false,
+              "provenance": "GENERIC_ENGINEERING_RECOMMENDATION"
+            },
+            {
+              "step": "1.2",
+              "instruction": "Architecture enforces strict separation of public client authorization and backend secret storage.",
+              "isRecommendation": true,
+              "provenance": "GENERIC_ENGINEERING_RECOMMENDATION"
+            }
+          ]
+        },
+        {
+          "sectionNumber": 2,
+          "id": "prerequisites",
+          "title": "2. Prerequisites & Credentials",
+          "summary": "Required developer credentials, administrative privileges, and infrastructure.",
+          "contentMarkdown": "Before writing code, verify that your engineering team possesses the necessary administrative and developer assets for Discord.",
+          "technicalInstructions": [
+            {
+              "step": "2.1",
+              "instruction": "Obtain a verified developer account on the official Discord Developer Portal.",
+              "isRecommendation": false,
+              "provenance": "OFFICIALLY_DOCUMENTED"
+            },
+            {
+              "step": "2.2",
+              "instruction": "Ensure HTTPS endpoint infrastructure is available for staging and production OAuth callback handling.",
+              "isRecommendation": true,
+              "provenance": "GENERIC_ENGINEERING_RECOMMENDATION"
+            }
+          ]
+        },
+        {
+          "sectionNumber": 3,
+          "id": "application_registration",
+          "title": "3. Provider Application Registration",
+          "summary": "Registering the OAuth application and securing client identifiers.",
+          "contentMarkdown": "Navigate to the Discord Developer Console and register a new application.",
+          "technicalInstructions": [
+            {
+              "step": "3.1",
+              "instruction": "Create the application record: Discord Developer Portal application registration.",
+              "isRecommendation": false,
+              "provenance": "INDEPENDENTLY_CORROBORATED"
+            },
+            {
+              "step": "3.2",
+              "instruction": "Store the issued Client ID and Client Secret in an environment secrets manager (e.g. AWS Secrets Manager or GCP Secret Manager). Never commit secrets to source repositories.",
+              "isRecommendation": true,
+              "provenance": "GENERIC_ENGINEERING_RECOMMENDATION"
+            }
+          ]
+        },
+        {
+          "sectionNumber": 4,
+          "id": "oauth_configuration",
+          "title": "4. OAuth 2.0 Configuration",
+          "summary": "Grant type selection, PKCE parameter requirement, and client configuration.",
+          "contentMarkdown": "Configure the OAuth 2.0 exchange mechanisms based on documented provider capabilities.",
+          "technicalInstructions": [
+            {
+              "step": "4.1",
+              "instruction": "Officially recommended grant: Authorization Code Grant with PKCE. Discord officially recommends using the Authorization Code Grant with Proof Key for Code Exchange (PKCE) for production applications.",
+              "supportingClaimId": "claim_discord_1",
+              "evidenceText": "For production apps, use the authorization code grant with PKCE instead.",
+              "isRecommendation": false,
+              "provenance": "OFFICIALLY_DOCUMENTED"
+            },
+            {
+              "step": "4.2",
+              "instruction": "Do NOT use the Implicit Grant: Discord warns against using the implicit grant in production environments due to token leakage risks and lack of refresh tokens.",
+              "supportingClaimId": "claim_discord_2",
+              "evidenceText": "The implicit grant is not recommended outside of quick prototypes. It returns the access token directly in the redirect URL, where it can leak through browser history, logs, and Referer headers, and it doesn’t provide a refresh token.",
+              "isRecommendation": false,
+              "provenance": "OFFICIALLY_DOCUMENTED"
+            }
+          ],
+          "codeSnippet": {
+            "language": "typescript",
+            "caption": "PKCE S256 Code Challenge Generation (RFC 7636)",
+            "code": "import crypto from 'node:crypto';\n\nexport function generatePkcePair() {\n  const verifier = crypto.randomBytes(32).toString('base64url');\n  const challenge = crypto\n    .createHash('sha256')\n    .update(verifier)\n    .digest('base64url');\n  return { verifier, challenge, method: 'S256' };\n}"
+          }
+        },
+        {
+          "sectionNumber": 5,
+          "id": "redirect_uri_setup",
+          "title": "5. Redirect URI Setup",
+          "summary": "Registering exact HTTPS redirect endpoints and preventing open redirection.",
+          "contentMarkdown": "Discord enforces strict redirect URI matching. Every redirect URI must be explicitly registered prior to initiating authorization requests.",
+          "technicalInstructions": [
+            {
+              "step": "5.1",
+              "instruction": "Configured redirect policy: Strict HTTPS redirect URI matching; localhost permitted for development.",
+              "isRecommendation": false,
+              "provenance": "OFFICIALLY_DOCUMENTED"
+            },
+            {
+              "step": "5.2",
+              "instruction": "Ensure the callback URI does not contain wildcards, fragment identifiers (#), or HTTP schemes in production.",
+              "isRecommendation": true,
+              "provenance": "GENERIC_ENGINEERING_RECOMMENDATION"
+            }
+          ]
+        },
+        {
+          "sectionNumber": 6,
+          "id": "scope_selection",
+          "title": "6. Scope Selection & Justifications",
+          "summary": "Selecting minimal necessary permission strings and managing scope tiers.",
+          "contentMarkdown": "Request only the scopes required for your application's active features. Excess scopes increase user abandonment and may trigger mandatory compliance reviews.",
+          "technicalInstructions": [
+            {
+              "step": "6.1",
+              "instruction": "Scope 'identify' [Standard]: Allows /users/@me without email. Audit requirement: Self-service user consent",
+              "supportingClaimId": "https://discord.com/developers/docs/topics/oauth2",
+              "evidenceText": "Allows /users/@me without email",
+              "isRecommendation": false,
+              "provenance": "OFFICIALLY_DOCUMENTED"
+            },
+            {
+              "step": "6.2",
+              "instruction": "Scope 'email' [Standard]: Enables /users/@me with email. Audit requirement: User consent prompt",
+              "supportingClaimId": "https://discord.com/developers/docs/topics/oauth2",
+              "evidenceText": "Enables /users/@me with email",
+              "isRecommendation": false,
+              "provenance": "OFFICIALLY_DOCUMENTED"
+            },
+            {
+              "step": "6.3",
+              "instruction": "Scope 'guilds' [Standard]: Allows /users/@me/guilds. Audit requirement: User consent prompt",
+              "supportingClaimId": "https://discord.com/developers/docs/topics/oauth2",
+              "evidenceText": "Allows /users/@me/guilds",
+              "isRecommendation": false,
+              "provenance": "OFFICIALLY_DOCUMENTED"
+            }
+          ]
+        },
+        {
+          "sectionNumber": 7,
+          "id": "authentication_flow",
+          "title": "7. Authentication Flow Walkthrough",
+          "summary": "Assembling the authorization URL, user consent handoff, and code exchange.",
+          "contentMarkdown": "The authorization workflow begins when a user initiates the integration handoff in your application.",
+          "technicalInstructions": [
+            {
+              "step": "7.1",
+              "instruction": "Generate a cryptographically secure random `state` parameter and persist it in a session cookie.",
+              "isRecommendation": true,
+              "provenance": "GENERIC_ENGINEERING_RECOMMENDATION"
+            },
+            {
+              "step": "7.2",
+              "instruction": "Redirect user to provider authorization endpoint with client_id, redirect_uri, response_type=code, scope, state, and code_challenge.",
+              "isRecommendation": true,
+              "provenance": "GENERIC_ENGINEERING_RECOMMENDATION"
+            },
+            {
+              "step": "7.3",
+              "instruction": "Upon callback, verify `state` matches session cookie before submitting code exchange POST request.",
+              "isRecommendation": true,
+              "provenance": "GENERIC_ENGINEERING_RECOMMENDATION"
+            }
+          ],
+          "codeSnippet": {
+            "language": "typescript",
+            "caption": "Token Exchange Request Structure",
+            "code": "// POST token exchange request\nconst response = await fetch(TOKEN_ENDPOINT, {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },\n  body: new URLSearchParams({\n    grant_type: 'authorization_code',\n    code: authCode,\n    redirect_uri: REDIRECT_URI,\n    client_id: CLIENT_ID,\n    code_verifier: pkceVerifier\n  })\n});\nconst tokenData = await response.json();"
+          }
+        },
+        {
+          "sectionNumber": 8,
+          "id": "token_management",
+          "title": "8. Token Management & Rotation",
+          "summary": "Access token expiration handling, refresh token safety, and storage security.",
+          "contentMarkdown": "Handle issued credentials according to documented token lifespan and rotation semantics.",
+          "technicalInstructions": [
+            {
+              "step": "8.1",
+              "instruction": "Access tokens issued via the OAuth 2.0 authorization code exchange return an expires_in lifespan of 604,800 seconds (7 days). (Applicability: OAuth 2.0 Bearer access tokens returned via Authorization Code Grant exchange)",
+              "supportingClaimId": "claim_discord_3",
+              "evidenceText": "\"expires_in\" : 604800 ,",
+              "isRecommendation": false,
+              "provenance": "OFFICIALLY_DOCUMENTED"
+            },
+            {
+              "step": "8.2",
+              "instruction": "GENERIC ENGINEERING RECOMMENDATION: In high-concurrency environments, implement a mutex lock around refresh requests to prevent race conditions in case single-use rotation is enforced.",
+              "isRecommendation": true,
+              "provenance": "GENERIC_ENGINEERING_RECOMMENDATION"
+            },
+            {
+              "step": "8.3",
+              "instruction": "PROVIDER REFRESH ROTATION BEHAVIOR UNKNOWN: Discord developer documentation does not publish whether refresh tokens are single-use or reusable. Do not assume single-use rotation is enforced until verified.",
+              "isRecommendation": false,
+              "provenance": "UNKNOWN"
+            }
+          ],
+          "warnings": [
+            "Applies strictly to user-authorized access tokens; bot tokens do not expire on this schedule."
+          ]
+        },
+        {
+          "sectionNumber": 9,
+          "id": "resource_access_validation",
+          "title": "9. Resource Access Validation",
+          "summary": "Resource-level authorization checks and workspace sharing models.",
+          "contentMarkdown": "Respect the boundary between ambient account authorization and specific resource access.",
+          "technicalInstructions": [
+            {
+              "step": "9.1",
+              "instruction": "Workspace sharing model: Guild owner or administrator installs integration..",
+              "isRecommendation": false,
+              "provenance": "INDEPENDENTLY_CORROBORATED"
+            },
+            {
+              "step": "9.2",
+              "instruction": "Catch HTTP 403 Forbidden responses specifically indicating that the authorized user lacks access to the requested target document/channel.",
+              "isRecommendation": true,
+              "provenance": "GENERIC_ENGINEERING_RECOMMENDATION"
+            }
+          ]
+        },
+        {
+          "sectionNumber": 10,
+          "id": "error_handling",
+          "title": "10. Error Handling & Rate Limit Backoff",
+          "summary": "Handling OAuth errors, rate limit quotas, and transient network failures.",
+          "contentMarkdown": "Implement robust error handling for standard OAuth 2.0 error codes and rate limit headers.",
+          "technicalInstructions": [
+            {
+              "step": "10.1",
+              "instruction": "Discord enforces an isolated, dedicated set of rate limits specifically for bot tokens. (Applicability: Bot user tokens and bot-authorized API requests)",
+              "supportingClaimId": "claim_discord_4",
+              "evidenceText": "Bots have an entirely separate set of rate limits .",
+              "isRecommendation": false,
+              "provenance": "OFFICIALLY_DOCUMENTED"
+            },
+            {
+              "step": "10.2",
+              "instruction": "On HTTP 429, parse the `Retry-After` response header and queue requests with jittered exponential backoff.",
+              "isRecommendation": true,
+              "provenance": "GENERIC_ENGINEERING_RECOMMENDATION"
+            }
+          ]
+        },
+        {
+          "sectionNumber": 11,
+          "id": "security_considerations",
+          "title": "11. Security Considerations",
+          "summary": "CSRF defense, secret leakage prevention, and secure token storage.",
+          "contentMarkdown": "Security safeguards are mandatory to protect user tokens from interception or leakage.",
+          "technicalInstructions": [
+            {
+              "step": "11.1",
+              "instruction": "Encrypt access and refresh tokens at rest in database using AES-256-GCM.",
+              "isRecommendation": true,
+              "provenance": "GENERIC_ENGINEERING_RECOMMENDATION"
+            },
+            {
+              "step": "11.2",
+              "instruction": "Never return access tokens or refresh tokens to client-side browsers or single-page applications.",
+              "isRecommendation": true,
+              "provenance": "GENERIC_ENGINEERING_RECOMMENDATION"
+            }
+          ]
+        },
+        {
+          "sectionNumber": 12,
+          "id": "testing_checklist",
+          "title": "12. Testing Checklist",
+          "summary": "Pre-production test scenarios covering happy path, revocation, and failure states.",
+          "contentMarkdown": "Execute these automated and manual verification tests in a staging environment prior to production deployment.",
+          "technicalInstructions": [
+            {
+              "step": "12.1",
+              "instruction": "Test 1: User initiates authorization and grants consent -> code exchanged -> tokens persisted.",
+              "isRecommendation": true,
+              "provenance": "PROJECT_ASSUMPTION"
+            },
+            {
+              "step": "12.2",
+              "instruction": "Test 2: Tampered state parameter is rejected with HTTP 400 Bad Request.",
+              "isRecommendation": true,
+              "provenance": "GENERIC_ENGINEERING_RECOMMENDATION"
+            },
+            {
+              "step": "12.3",
+              "instruction": "Test 3: Token expiration simulated -> refresh token exchanged -> new access token stored.",
+              "isRecommendation": true,
+              "provenance": "PROJECT_ASSUMPTION"
+            },
+            {
+              "step": "12.4",
+              "instruction": "Test 4: User revokes connection in provider portal -> application handles 401 and prompts reconnect.",
+              "isRecommendation": true,
+              "provenance": "PROJECT_ASSUMPTION"
+            }
+          ]
+        },
+        {
+          "sectionNumber": 13,
+          "id": "production_deployment_checklist",
+          "title": "13. Production Deployment Checklist",
+          "summary": "Operational verification for launch, telemetry, and secret rotation.",
+          "contentMarkdown": "Verify all operational readiness items before enabling integration in production.",
+          "technicalInstructions": [
+            {
+              "step": "13.1",
+              "instruction": "Production client credentials provisioned and injected into production vault.",
+              "isRecommendation": true,
+              "provenance": "PROJECT_ASSUMPTION"
+            },
+            {
+              "step": "13.2",
+              "instruction": "Production redirect URIs registered and verified in provider developer portal.",
+              "isRecommendation": true,
+              "provenance": "PROJECT_ASSUMPTION"
+            },
+            {
+              "step": "13.3",
+              "instruction": "Monitoring alerts configured for 401 Unauthorized spikes (>5% in 5m) and 429 Throttling events.",
+              "isRecommendation": true,
+              "provenance": "GENERIC_ENGINEERING_RECOMMENDATION"
+            }
+          ]
+        },
+        {
+          "sectionNumber": 14,
+          "id": "known_limitations_and_unresolved_questions",
+          "title": "14. Known Limitations & Unresolved Questions",
+          "summary": "Unpublished documentation areas, known constraints, and provider-specific nuances.",
+          "contentMarkdown": "The following items represent areas where the investigated documentation was silent or where engineering limitations exist.",
+          "technicalInstructions": [
+            {
+              "step": "14.1",
+              "instruction": "Documented limitation: Detailed code_challenge schema parameters are not published on the primary topic page.",
+              "isRecommendation": false,
+              "provenance": "UNKNOWN"
+            },
+            {
+              "step": "14.2",
+              "instruction": "Documented limitation: Global user-token rate limits require consulting the dedicated rate limits documentation.",
+              "isRecommendation": false,
+              "provenance": "UNKNOWN"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
